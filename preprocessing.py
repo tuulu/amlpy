@@ -1,3 +1,4 @@
+# Import libraries
 import os
 from glob import glob
 import numpy as np
@@ -76,7 +77,7 @@ df = df.drop('Filename', axis=1)
 print(df.head())
 print(df.shape)
 
-df.to_csv("cleaned_data.csv")
+df.to_csv("output/cleaned_data.csv")
 
 # Create a column for each Patient with their own values and ID_REF as rows (this is the matrix)
 combined_df = df.pivot_table(index='ID_REF', columns='Patient', values='VALUE', aggfunc='first')
@@ -132,9 +133,10 @@ combined_df_zscore = combined_df.apply(zscore, axis=1)  # for machine learning
 
 
 # Save the normalized count matrix
-combined_df.to_csv("normalized_count_matrix.csv")
+combined_df.to_csv("output/normalized_count_matrix.csv")
 
 # Print summary
 print(combined_df.head())
+
 
 
