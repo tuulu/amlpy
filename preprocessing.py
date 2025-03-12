@@ -1,4 +1,4 @@
-# Import libraries
+# Call libraries
 import os
 from glob import glob
 import numpy as np
@@ -8,8 +8,8 @@ import seaborn as sns
 from scipy.stats import zscore
 
 # Define the folder containing the sample_table.txt files
-folder_path = "C:/Users/tuulu/Desktop/Python_project/data/E-GEOD-14924" # Tuulu: You have to change this path to the path of the folder containing the sample_table.txt files
-id_path = "C:/Users/tuulu/Desktop/Python_project/data/E-GEOD-14924/E-GEOD-14924.sdrf.txt" # And this too, it tells you what sample belongs to which patient
+folder_path = "data/E-GEOD-14924" # Tuulu: You have to change this path to the path of the folder containing the sample_table.txt files
+id_path = "data/E-GEOD-14924/E-GEOD-14924.sdrf.txt" # And this too, it tells you what sample belongs to which patient
 
 # Get a list of all sample_table.txt files in the folder
 file_list = glob(os.path.join(folder_path, "*sample_table.txt"))
@@ -98,7 +98,7 @@ print(combined_df.shape)
 # Creating a new dataframe that stores the sample info (for plotting etc.)
 sample_ids = combined_df.columns.tolist()
 sample_info = pd.DataFrame({
-    'Sample': patient_ids,
+    'Sample': sample_ids,
     'Patient_Group': [f"{id.split('_')[1]}_{id.split('_')[2]}" for id in sample_ids]
 })
 
@@ -112,25 +112,24 @@ print(na_counts.mean())
 # Removing rows with only NA values (WE CAN IMPUTE LATER, FOR NOW WE WANT TO KEEP AS MUCH DATA AS POSSIBLE)
 combined_df = combined_df[combined_df.notna().any(axis=1)]
 
-
 # Checking if the dataset was already normalized
 print(combined_df.describe())
 # Print median of all columns
 print("Overall median value:", combined_df.median().median())
 
-plt.figure(figsize=(8,5))
-sns.histplot(df["VALUE"], bins=50, kde=True)
-plt.xlabel("Expression Value")
-plt.ylabel("Frequency")
-plt.title("Distribution of Expression Values")
-plt.show()
+# Optional: Plotting the distribution of the expression values
+# plt.figure(figsize=(8,5))
+# sns.histplot(df, bins=50, kde=True)
+# plt.xlabel("Expression")
+# plt.ylabel("Frequency")
+# plt.title("Distribution of Expression Values")
+# plt.show()
 
-# Optional: Normalize the data
-
-combined_df = np.log2(combined_df + 1)  # for DGE
+# Optional: Normalize the data if it is not already normalized (median is above 20)
+# Z-score normalization (standardization) is mandator
+if combined_df.median().median() > 20:
+    combined_df = np.log2(combined_df + 1)  # for DGE
 combined_df_zscore = combined_df.apply(zscore, axis=1)  # for machine learning
-
-
 
 # Save the normalized count matrix
 combined_df.to_csv("output/normalized_count_matrix.csv")
@@ -138,5 +137,39 @@ combined_df.to_csv("output/normalized_count_matrix.csv")
 # Print summary
 print(combined_df.head())
 
+# Gene annotation
+annotation = pd.read_csv("data/E-GEOD-14924/HG-U133_Plus_2.na36.annot.csv", sep=",", skiprows=25)
+annotation = annotation[["Probe Set ID", "Gene Symbol", "Gene Title", "Ensembl"]] # Removing the other columns
 
+print(annotation.columns)
+
+combined_df = combined_df.reset_index().rename(columns={"ID_REF": "Probe Set ID"})
+print(combined_df.head())
+
+# Merge the annotation with the count matrix
+combined_df = combined_df.merge(annotation, on="Probe Set ID", how="left")
+
+print("Final annotated dataframe:")
+print(combined_df.head())
+
+# Removing the Probe Set ID column and moving Gene Symbol, and Ensembl to the front
+combined_df = combined_df.drop(columns=["Probe Set ID"])
+combined_df = combined_df[["Gene Symbol", "Ensembl", "Gene Title"] + combined_df.columns[:-3].tolist()]
+
+print(combined_df.columns)
+
+# Doing the same for combined_df_zscore
+# combined_df_zscore = combined_df_zscore.reset_index().rename(columns={"ID_REF": "Probe Set ID"})
+# combined_df_zscore = combined_df_zscore.merge(annotation, on="Probe Set ID", how="left")
+# combined_df_zscore = combined_df_zscore.drop(columns=["Probe Set ID"])
+# combined_df_zscore = combined_df_zscore[["Gene Symbol", "Ensembl", "Gene Title"] + combined_df_zscore.columns[:-3].tolist()]
+# print(combined_df_zscore.columns)
+
+# Save the annotated matrix
+combined_df.to_csv("output/annotated_matrix.csv")
+print("Saved annotated matrix to output/annotated_matrix.csv")
+
+# Save the annotated Z-score matrix
+#combined_df_zscore.to_csv("output/annotated_matrix_zscore.csv")
+#print("Saved annotated Z-score  matrix to output/annotated_matrix_zscore.csv")
 
