@@ -4,7 +4,7 @@ Oncodetector is an artificial intelligence-based tool that estimates the probabi
 
 🚀 Features
 
-Thermo Fischer microarray data preprocessing.
+Affymetrix microarray data preprocessing.
 
 ML model training & evaluation.
 
