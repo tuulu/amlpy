@@ -8,8 +8,8 @@ import seaborn as sns
 from scipy.stats import zscore
 
 # Define the folder containing the sample_table.txt files
-folder_path = "C:/Users/User/OneDrive/Dokumente/Python_For_Life_Sciences/Coding for group project/Processed Data" # Tuulu: You have to change this path to the path of the folder containing the sample_table.txt files
-id_path = "C:/Users/User/OneDrive/Dokumente/Python_For_Life_Sciences/Coding for group project/E-GEOD-14924.sdrf.txt" # And this too, it tells you what sample belongs to which patient
+folder_path = "data/E-GEOD-14924" # Tuulu: You have to change this path to the path of the folder containing the sample_table.txt files
+id_path = "data/E-GEOD-14924/E-GEOD-14924.sdrf.txt" # And this too, it tells you what sample belongs to which patient
 
 # Get a list of all sample_table.txt files in the folder
 file_list = glob(os.path.join(folder_path, "*sample_table.txt"))
@@ -168,5 +168,5 @@ print(CD8_imput.corr().head())
 #print(z_score_data_CD8.head()) 
 
 # Storing the values as csv files
-CD4_imput.to_csv("CD4 Lymphocytes")
-CD8_imput.to_csv("CD8 Lymphocytes")  
+CD4_imput.to_csv("output/CD4 Lymphocytes")
+CD8_imput.to_csv("output/CD8 Lymphocytes")
