@@ -84,19 +84,3 @@ ranking = signs['stat'].dropna().sort_values(ascending=False)
 print(ranking.head()) 
 probe_ids=list(ranking.index) # Here we store the probe Gen_IDs as a list 
 
-# For the further analysis mygene library was used to substitute Probe IDs with convential Gene IDs and Gene Symbols 
-!pip install mygene
-import mygene
-# Creating a MyGeneInfo object
-mg = mygene.MyGeneInfo() 
-# The ID_REF relates to the gene codes stated by Affymetrix(microaray producer)
-# Implementing mygene  library we could substitute  the Probe IDs to the standart Gene Symbols and Gene IDs
-
-
-result = mg.querymany(probe_ids, scopes='affy', fields='symbol,ensembl.gene', species='human')
-
-for item in result:
-    gene_symbol = item.get('symbol', 'Not Found')
-   ensembl_gene_id = item.get('ensembl', {}).get('gene', 'Not Found')
-
-print(f"Probe ID: {item['query']} -> Gene Symbol: {gene_symbol}, Ensembl Gene ID: {ensembl_gene_id}")
