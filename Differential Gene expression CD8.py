@@ -76,27 +76,22 @@ sc.pl.pca(dds, color='Condition', size=200)
 #Gen Set Enrichment Analysis: determining the biological processes the differencially expressed genes are engaged in 
 import gseapy as gp
 from gseapy import gseaplot
+from gseapy import barplot, dotplot 
+# Running the GSEAPY  using 'GO_Biological_Process_2018' dataset
+gsea_results = gp.gsea(
+    data=annotated_CD8,
+    cls=['AML','AML','AML','AML','AML','AML','AML','AML','AML','AML','healthy','healthy','healthy','healthy','healthy','healthy','healthy','healthy','healthy','healthy','healthy'],            
+    gene_sets='GO_Biological_Process_2018',             
+    permutation_type='gene_set',
+    min_size=15, 
+    max_size=200,                
+    method='signal_to_noise'     
+)
+# gsea object with relevant statistics 
+gsea_results.res2d
+print(gsea_results.res2d.head())  
+# Creating a plot, NES= normalized enrichment score 
+ax = dotplot(gsea_results.res2d,column="NES",title='KEGG_2021_Human',cmap='viridis', size=5,figsize=(4,5), cutoff=1) 
+ax.figure.savefig('CD8_dotplot.png', bbox_inches='tight', dpi=300) 
 
-#Conducting GSEA analysis on DEGs 
-signs # this dataframe depicts significant DEGs with adjuscent statistics
 
-#Filtering out unnecessary columns
-ranking = signs['stat'].dropna().sort_values(ascending=False)
-print(ranking.head()) 
-probe_ids=list(ranking.index) # Here we store the probe Gen_IDs as a list 
-
-# For the further analysis mygene library was used to substitute Probe IDs with convential Gene IDs and Gene Symbols 
-import mygene
-# Creating a MyGeneInfo object
-
-mg = mygene.MyGeneInfo() 
-# The ID_REF relates to the gene codes stated by Affymetrix(microaray producer)
-# Implementing mygene library we could substitute  the Probe IDs to the standart Gene Symbols and Gene IDs
-
-result = mg.querymany(probe_ids, scopes='affy', fields='symbol,ensembl.gene', species='human')
-
-for item in result:
-    gene_symbol = item.get('symbol', 'Not Found')
-   ensembl_gene_id = item.get('ensembl', {}).get('gene', 'Not Found')
-
-print(f"Probe ID: {item['query']} -> Gene Symbol: {gene_symbol}, Ensembl Gene ID: {ensembl_gene_id}")
