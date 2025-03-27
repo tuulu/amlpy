@@ -1,8 +1,8 @@
-📝 Description
+# **ONCODETECTOR**
 
 Oncodetector is an artificial intelligence-based tool that estimates the probability of an Affymetrix rRNA microarray sample being cancerous.
 
-🚀 Features
+## 🚀 **Features**
 
 Affymetrix microarray data preprocessing.
 
@@ -10,19 +10,20 @@ ML model training & evaluation.
 
 Generates cancer predictions.
 
-🛠️ Installation
+## 🛠️ **Installation**
 
 Clone the repo:
-
+```bash
 git clone https://github.com/your-username/oncodetect.git
 
 cd project-oncodetect
+```
 
 Install the required packages:
-
+```bash
 pip install -r requirements.txt
-
-🧪 Usage
+```
+## 🧪 **Usage (I'll still update)**
 
 Run data preprocessing:
 
@@ -35,9 +36,11 @@ Generate predictions:
 
 python src/predict.py
 
-📊 Libraries used
+## 📊 **Libraries used**
 
-📄 License
+Libraries used can be seen in requirements.txt document.
 
-MIT 2.0
+##📄 **License**
+
+MIT
 
