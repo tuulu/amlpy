@@ -75,12 +75,21 @@ sc.pl.pca(dds, color='Condition', size=200)
 #Gen Set Enrichment Analysis: determining the biological processes the differencially expressed genes are engaged in 
 import gseapy as gp
 from gseapy import gseaplot
-
-#Conducting GSEA analysis on DEGs 
-signs # this dataframe depicts significant DEGs with adjuscent statistics
-
-#Filtering out unnecessary columns
-ranking = signs['stat'].dropna().sort_values(ascending=False)
-print(ranking.head()) 
-probe_ids=list(ranking.index) # Here we store the probe Gen_IDs as a list 
+from gseapy import barplot, dotplot 
+# Running the GSEAPY  using 'GO_Biological_Process_2018' dataset
+gsea_results = gp.gsea(
+    data=annotated_CD4,
+    cls=['AML','AML','AML','AML','AML','AML','AML','AML','AML','AML','healthy','healthy','healthy','healthy','healthy','healthy','healthy','healthy','healthy','healthy'],            
+    gene_sets='GO_Biological_Process_2018',             
+    permutation_type='gene_set',
+    min_size=15, 
+    max_size=200,                
+    method='signal_to_noise'     
+)
+# gsea object with relevant statistics 
+gsea_results.res2d
+print(gsea_results.res2d.head())  
+# Creating a plot, NES= normalized enrichment score 
+ax = dotplot(gsea_results.res2d,column="NES",title='KEGG_2021_Human',cmap='viridis', size=5,figsize=(4,5), cutoff=1) 
+ax.figure.savefig('CD4_dotplot.png', bbox_inches='tight', dpi=300)
 
