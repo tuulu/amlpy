@@ -23,6 +23,10 @@ Install the required packages:
 ```bash
 pip install -r requirements.txt
 ```
+## 📊 **Data**
+
+I'll update it!
+
 ## 🧪 **Usage (I'll still update)**
 
 Run data preprocessing:
@@ -36,7 +40,7 @@ Generate predictions:
 
 python src/predict.py
 
-## 📊 **Libraries used**
+## 📚 **Libraries**
 
 Libraries used can be seen in requirements.txt document.
 
