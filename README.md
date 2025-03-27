@@ -40,7 +40,7 @@ python src/predict.py
 
 Libraries used can be seen in requirements.txt document.
 
-##📄 **License**
+## 📄 **License**
 
 MIT
 
