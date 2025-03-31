@@ -151,11 +151,11 @@ src.data_process.histo_data(aml, healthy, output_dir = output_dir, hour_timestam
 #------------------------------------------------------------------------------------------------
 
 # DISABLE / COMMENT OUT FOR FULL PIPELINE: Using a smaller subset of the data for faster processing
-print("\n Using a smaller subset of the data for faster processing (first 1000 genes)...")
-aml = aml.iloc[:1000,:]
-healthy = healthy.iloc[:1000,:]
-print(aml.shape)
-print(healthy.shape)
+# print("\n Using a smaller subset of the data for faster processing (first 2000 genes)...")
+# aml = aml.iloc[:2000,:]
+# healthy = healthy.iloc[:2000,:]
+# print(aml.shape)
+# print(healthy.shape)
 
 #------------------------------------------------------------------------------------------------
 # Differential gene expression (DGE) analysis
@@ -178,7 +178,7 @@ signs = src.DGE.run_dge(dds_obj)
 signs_df = pd.DataFrame(signs.index)
 print(f"signs_df shape: {signs_df.shape}")
 
-# Determine the overlapping genes between DGE and the expression data   
+# Determine the overlapping genes between DGE and the expression data
 aml_merged, signs_merged = src.data_process.define_overlap(aml, signs_df)
 aml = aml_merged
 signs = signs_merged

@@ -50,6 +50,9 @@ def combine_data(df1, df2, round = False):
     if round is True:
         combined_counts = combined_counts.round(0)
     
+    # Prevent negative counts (turn them into 0)
+    combined_counts = combined_counts.applymap(lambda x: 0 if x < 0 else x)
+
     return combined_counts
 
 #------------------------------------------------------------------------------------------------
