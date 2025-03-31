@@ -15,13 +15,13 @@ Cancer Prediction Generation: Delivers predictions on the probability of AML pre
 ## 🛠️ **Installation**
 To get started with amlpy, follow these steps to set up the environment on your local machine:
 
-1) Clone the Repository: Clone the amlpy repository to your local machine using the following command:
+1) Clone the amlpy repository to your local machine using the following command:
 ```bash
 git clone https://github.com/tuulu/amlpy.git
 
 cd amlpy
 ```
-2) Install dependencies: Install all necessary Python packages listed in the requirements.txt file:
+2) Install all necessary Python packages listed in the requirements.txt file:
 ```bash
 pip install -r requirements.txt
 ```
