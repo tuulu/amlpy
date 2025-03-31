@@ -11,16 +11,17 @@ intro.intro()
 # python ./src/data_import.py -> Run beforehand to download the data
 
 # START OF PIPELINE
-print("\n Starting amlpy...")
+print("Starting amlpy...")
 
 #------------------------------------------------------------------------------------------------
 # Call libraries
-from datetime import datetime
-from glob import glob
 import os
+import torch
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+from datetime import datetime
+from glob import glob
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import roc_curve, precision_recall_curve, confusion_matrix, ConfusionMatrixDisplay
 from torch.utils.data import DataLoader
@@ -53,6 +54,7 @@ os.makedirs(output_dir, exist_ok = True)
 os.makedirs(f"{output_dir}/figures", exist_ok = True)
 
 print(f"Started at {hour_timestamp("%H:%M:%S")}.")
+time_start = datetime.now()
 
 #------------------------------------------------------------------------------------------------
 # We import the data from the GSE68833 and GSE45878 datasets
@@ -218,6 +220,7 @@ print("\n GSEA DONE")
 #------------------------------------------------------------------------------------------------
 # AI / Machine learning
 # Normalize the data again (this time with Z-score normalization for machine learning)
+# Remove just one column and save the removed column in a separate variable (for later use)
 aml = src.data_process.normalize_if_needed(aml, z_score = True)
 healthy = src.data_process.normalize_if_needed(healthy, z_score = True)
 
@@ -257,6 +260,21 @@ print("\n Random Forest prediction DONE")
 #Multilayer Perceptron (MLP) prediction
 print("\n Performing MLP prediction...")
 
+# Pop the two last columns from each df (using them for inference later)
+# The index is set to the original index to keep the sample names
+aml_removed_1 = pd.DataFrame(aml.pop(aml.columns[-1]), index=aml.index)
+aml_removed_2 = pd.DataFrame(aml.pop(aml.columns[-1]), index=aml.index)
+healthy_removed_1 = pd.DataFrame(healthy.pop(healthy.columns[-1]), index=healthy.index)
+healthy_removed_2 = pd.DataFrame(healthy.pop(healthy.columns[-1]), index=healthy.index)
+
+# They're transposed to be used as tensors later
+aml_removed_1 = aml_removed_1.T
+aml_removed_2 = aml_removed_2.T
+healthy_removed_1 = healthy_removed_1.T
+healthy_removed_2 = healthy_removed_2.T
+
+print(f"aml_removed_1: {aml_removed_1.head()}")
+
 # Load your data
 aml_df = aml.set_index('Gene Symbol')
 healthy_df = healthy.set_index('Gene Symbol')
@@ -295,6 +313,43 @@ trained_model = train_model(model, train_loader, val_loader, epochs=50)
 # Evaluating the model
 mlp_test_accuracy = evaluate_model(trained_model, val_loader, output_dir = output_dir, hour_timestamp = hour_timestamp())
 
+# Saving the model (not really needed here, but just in case)
+torch.save(trained_model, f"{output_dir}/MLP_model_{hour_timestamp()}.pth")
+
+# Inference (predicting new samples)
+trained_model.eval()
+
+# Convert dfs to tensors and run inference (no_grad() is used to disable gradient calculation and save time)
+with torch.no_grad():
+    # Convert dfs to tensors
+    aml_removed_1_tensor = torch.tensor(aml_removed_1.values, dtype=torch.float32)
+    aml_removed_2_tensor = torch.tensor(aml_removed_2.values, dtype=torch.float32)
+    healthy_removed_1_tensor = torch.tensor(healthy_removed_1.values, dtype=torch.float32)
+    healthy_removed_2_tensor = torch.tensor(healthy_removed_2.values, dtype=torch.float32)
+
+    # Run inference
+    aml_removed_1_pred = trained_model(aml_removed_1_tensor)
+    aml_removed_2_pred = trained_model(aml_removed_2_tensor)
+    healthy_removed_1_pred = trained_model(healthy_removed_1_tensor)
+    healthy_removed_2_pred = trained_model(healthy_removed_2_tensor)
+
+# Print the predictions
+print("\nPredictions for removed samples:")
+print(f"AML sample 1 prediction: {aml_removed_1_pred.item():.4f}")
+print(f"AML sample 2 prediction: {aml_removed_2_pred.item():.4f}")
+print(f"Healthy sample 1 prediction: {healthy_removed_1_pred.item():.4f}")
+print(f"Healthy sample 2 prediction: {healthy_removed_2_pred.item():.4f}")
+
+#Save the predictions
+predictions = pd.DataFrame({
+    "AML sample 1": [aml_removed_1_pred.item()],
+    "AML sample 2": [aml_removed_2_pred.item()],
+    "Healthy sample 1": [healthy_removed_1_pred.item()],
+    "Healthy sample 2": [healthy_removed_2_pred.item()]
+}, index=['Probability of AML%'])
+
+predictions.to_csv(f"{output_dir}/inference_results_{hour_timestamp()}.csv", index=True)
+
 print("\n MLP prediction DONE")
 #------------------------------------------------------------------------------------------------
 # Comparing the results of the MLP and Random Forest models
@@ -318,7 +373,11 @@ print("\n Comparison DONE")
 # END OF PIPELINE
 print("\n amlpy DONE")
 print(f"Finished at {hour_timestamp("%H:%M:%S")}.")
+time_end = datetime.now()
+time_diff = time_end - time_start
+print(f"Total runtime (approx.): {int(round(time_diff.total_seconds()/60, 0))} minute(s)")
 print(f"All output saved in directory: {output_dir}.")
+
 
 #------------------------------------------------------------------------------------------------
 # Cheers! Thanks for taking the time to run the pipeline!
