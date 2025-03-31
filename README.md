@@ -1,6 +1,12 @@
+<<<<<<< HEAD
 # **amlpy**
 
 amlpy is a small-scale tool that estimates the probability of an Affymetrix mRNA microarray sample being positive for acute myeloid leukemia (AML).
+=======
+# **Amply**
+
+Amply is an artificial intelligence-based tool that estimates the probability of an Affymetrix rRNA microarray sample being cancerous.
+>>>>>>> c80492eb3719609f8ecafdd96123af0396f3c42f
 
 ## 🚀 **Features**
 
