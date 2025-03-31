@@ -37,6 +37,6 @@ python main.py
 ```
 3) Enjoy!
 
-## **Example results**
+## **Examples**
 
-Example results from running the pipeline can be found in /example_results
+Example outputs from running the pipeline can be found in /example_results
