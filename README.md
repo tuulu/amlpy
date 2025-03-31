@@ -1,6 +1,6 @@
-# **ONCODETECTOR**
+# **amlpy**
 
-Oncodetector is an artificial intelligence-based tool that estimates the probability of an Affymetrix rRNA microarray sample being cancerous.
+amlpy is a small-scale tool that estimates the probability of an Affymetrix mRNA microarray sample being positive for acute myeloid leukemia (AML).
 
 ## 🚀 **Features**
 
@@ -14,9 +14,9 @@ Generates cancer predictions.
 
 Clone the repo:
 ```bash
-git clone https://github.com/your-username/oncodetect.git
+git clone https://github.com/tuulu/amlpy.git
 
-cd project-oncodetect
+cd amlpy
 ```
 
 Install the required packages:
@@ -25,26 +25,16 @@ pip install -r requirements.txt
 ```
 ## 📊 **Data**
 
-I'll update it!
 
-## 🧪 **Usage (I'll still update)**
+## 🧪 **Usage**
 
-Run data preprocessing:
-
-python src/preprocess.py
-
-Train the model:
-
-python src/train.py
-Generate predictions:
-
-python src/predict.py
+Please ensure you have the data downloaded first by running .src/data_import.py as a standalone script 
+```bash
+python .src/data_import.py
+```
 
 ## 📚 **Libraries**
 
 Libraries used can be seen in requirements.txt document.
 
-## 📄 **License**
-
-MIT
 

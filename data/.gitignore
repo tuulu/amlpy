@@ -1,2 +1,4 @@
-*
+# Only the annotation files are included, the data files are too large to be included in the repo
+*series_matrix.txt
+*.soft
 !.gitignore
