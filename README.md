@@ -36,3 +36,7 @@ python src/data_import.py
 python main.py
 ```
 3) Enjoy!
+
+## **Example results**
+
+Example results from running the pipeline can be found in /example_results

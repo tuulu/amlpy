@@ -114,7 +114,7 @@ def plot_metrics(y_true, y_pred_prob, y_pred, output_dir, hour_timestamp):
     plt.ylabel("True Positive Rate")
     plt.legend()
     plt.grid(True)
-    plt.savefig(f"{output_dir}/figures/ROC_curve_{hour_timestamp}.png", bbox_inches = 'tight', dpi = 300)
+    plt.savefig(f"{output_dir}/figures/MLP_ROC_Curve_{hour_timestamp}.png", bbox_inches = 'tight', dpi = 300)
     plt.show()
 
     # Precision-Recall Curve
@@ -124,14 +124,14 @@ def plot_metrics(y_true, y_pred_prob, y_pred, output_dir, hour_timestamp):
     plt.xlabel("Recall")
     plt.ylabel("Precision")
     plt.grid(True)
-    plt.savefig(f"{output_dir}/figures/Precision_Recall_Curve_{hour_timestamp}.png", bbox_inches = 'tight', dpi = 300)
+    plt.savefig(f"{output_dir}/figures/MLP_Precision_Recall_Curve_{hour_timestamp}.png", bbox_inches = 'tight', dpi = 300)
     plt.show()
 
     # Confusion matrix
     disp = ConfusionMatrixDisplay(confusion_matrix = cm, display_labels = ["Healthy", "AML"])
     disp.plot(cmap=plt.cm.Blues, values_format="d")
     plt.title("MLP Confusion Matrix")
-    plt.savefig(f"{output_dir}/figures/Confusion_Matrix_{hour_timestamp}.png", bbox_inches = 'tight', dpi = 300)
+    plt.savefig(f"{output_dir}/figures/MLP_Confusion_Matrix_{hour_timestamp}.png", bbox_inches = 'tight', dpi = 300)
     plt.show()
 
     # Histogram of predicted probabilities

@@ -43,7 +43,7 @@ def train_rf(X, y, test_size = 0.2, random_state = 42, optimize = False):
     X_train_pca = pca.fit_transform(X_train_resampled)
     X_test_pca = pca.transform(X_test)
     
-    if optimize:
+    if optimize == True:
         # Use optimized parameters if optimize is True
         rf = optimize_rf_parameters(X_train_pca, y_train_resampled)
     else:
@@ -61,7 +61,7 @@ def train_rf(X, y, test_size = 0.2, random_state = 42, optimize = False):
     return rf, X_train_pca, X_test_pca, y_train_resampled, y_test
 
 #------------------------------------------------------------------------------------------------
-def evaluate_rf(rf, X_train_pca, X_test_pca, y_train, y_test, output_dir, hour_timestamp):
+def evaluate_rf(rf, X_train_pca, X_test_pca, y_train, y_test, output_dir, hour_timestamp, optimize=False):
     """Evaluates the model performance and creates visualizations."""
     # Make predictions
     training_predictions = rf.predict(X_train_pca)
@@ -86,15 +86,18 @@ def evaluate_rf(rf, X_train_pca, X_test_pca, y_train, y_test, output_dir, hour_t
     
     # Create visualizations if output directory is provided
     if output_dir is not None and hour_timestamp is not None:
-        plot_rf_metrics(y_test, test_probabilities, test_predictions, output_dir, hour_timestamp)
+        plot_rf_metrics(y_test, test_probabilities, test_predictions, output_dir, hour_timestamp, optimize)
     
     return train_accuracy, test_accuracy
 
-def plot_rf_metrics(y_true, y_pred_prob, y_pred, output_dir, hour_timestamp):
+def plot_rf_metrics(y_true, y_pred_prob, y_pred, output_dir, hour_timestamp, optimize=False):
     """Creates and saves visualization plots for Random Forest results."""
     fpr, tpr, _ = roc_curve(y_true, y_pred_prob)
     precision, recall, _ = precision_recall_curve(y_true, y_pred_prob)
     cm = confusion_matrix(y_true, y_pred)
+
+    # Add '_optimized' suffix if optimize is True
+    opt_suffix = "_optimized" if optimize else ""
 
     # ROC Curve
     plt.figure()
@@ -105,7 +108,7 @@ def plot_rf_metrics(y_true, y_pred_prob, y_pred, output_dir, hour_timestamp):
     plt.ylabel("True Positive Rate")
     plt.legend()
     plt.grid(True)
-    plt.savefig(f"{output_dir}/figures/RF_ROC_curve_{hour_timestamp}.png", bbox_inches = 'tight', dpi = 300)
+    plt.savefig(f"{output_dir}/figures/RF_ROC_curve{opt_suffix}_{hour_timestamp}.png", bbox_inches = 'tight', dpi = 300)
     plt.show()
 
     # Precision-Recall Curve
@@ -115,14 +118,14 @@ def plot_rf_metrics(y_true, y_pred_prob, y_pred, output_dir, hour_timestamp):
     plt.xlabel("Recall")
     plt.ylabel("Precision")
     plt.grid(True)
-    plt.savefig(f"{output_dir}/figures/RF_Precision_Recall_Curve_{hour_timestamp}.png", bbox_inches = 'tight', dpi = 300)
+    plt.savefig(f"{output_dir}/figures/RF_Precision_Recall_Curve{opt_suffix}_{hour_timestamp}.png", bbox_inches = 'tight', dpi = 300)
     plt.show()
 
     # Confusion Matrix
     disp = ConfusionMatrixDisplay(confusion_matrix = cm, display_labels = ["Healthy", "AML"])
     disp.plot(cmap = 'Blues', values_format = "d")
     plt.title("Random Forest Confusion Matrix")
-    plt.savefig(f"{output_dir}/figures/RF_Confusion_Matrix_{hour_timestamp}.png", bbox_inches = 'tight', dpi = 300)
+    plt.savefig(f"{output_dir}/figures/RF_Confusion_Matrix{opt_suffix}_{hour_timestamp}.png", bbox_inches = 'tight', dpi = 300)
     plt.show()
 
     # Histogram of predicted probabilities
@@ -132,7 +135,7 @@ def plot_rf_metrics(y_true, y_pred_prob, y_pred, output_dir, hour_timestamp):
     plt.xlabel("Probability of AML")
     plt.ylabel("Number of Samples")
     plt.grid(True)
-    plt.savefig(f"{output_dir}/figures/RF_Predicted_Probabilities_{hour_timestamp}.png", bbox_inches = 'tight', dpi = 300)
+    plt.savefig(f"{output_dir}/figures/RF_Predicted_Probabilities{opt_suffix}_{hour_timestamp}.png", bbox_inches = 'tight', dpi = 300)
     plt.show()
 
 #------------------------------------------------------------------------------------------------

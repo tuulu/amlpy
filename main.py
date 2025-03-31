@@ -43,7 +43,7 @@ def hour_timestamp(custom = None):
   if custom:
     return datetime.now().strftime(custom)
   else:
-    return datetime.now().strftime("%Y_%m_%d")
+    return datetime.now().strftime("%H_%M_%S")
 
 # Larger timestamp
 day_timestamp = datetime.now().strftime("%Y_%m_%d")
@@ -129,7 +129,7 @@ healthy.to_csv(f"{output_dir}/healthy_data_{hour_timestamp()}.csv", index=False)
 # First, we check if the data is already normalized, then perform log2 transformation (and z-score) if needed
 # We plot the data to check if it is normalized
 print("\n Plotting the distribution of the data...")
-src.data_process.histo_data(aml, healthy, output_dir = output_dir, hour_timestamp = hour_timestamp())
+src.data_process.histo_data(aml, healthy, output_dir = output_dir, hour_timestamp = hour_timestamp(), normalize = False)
 
 # We then normalize the data if it needs to be normalized
 print("\n Normalizing the data...")
@@ -146,7 +146,7 @@ print(healthy.describe())
 
 # Plot both datasets again to check if normalization was successful
 print("\n Plotting the distribution of the data again post-normalization...")
-src.data_process.histo_data(aml, healthy, output_dir = output_dir, hour_timestamp = hour_timestamp())
+src.data_process.histo_data(aml, healthy, output_dir = output_dir, hour_timestamp = hour_timestamp(), normalize = True)
 
 #------------------------------------------------------------------------------------------------
 
@@ -246,13 +246,13 @@ print(target.head())
 rf, X_train_pca, X_test_pca, y_train_resampled, y_test = src.random_forest.train_rf(X, target, test_size = 0.2, random_state = 42)
 
 # Evaluating accuracy of the model
-rf_train_accuracy, rf_test_accuracy = src.random_forest.evaluate_rf(rf, X_train_pca, X_test_pca, y_train_resampled, y_test, output_dir = output_dir, hour_timestamp = hour_timestamp())
+rf_train_accuracy, rf_test_accuracy = src.random_forest.evaluate_rf(rf, X_train_pca, X_test_pca, y_train_resampled, y_test, output_dir = output_dir, hour_timestamp = hour_timestamp(), optimize = False)
 
 # Training the Random Forest model with optimization (can take a looong time)
 rf, X_train_pca, X_test_pca, y_train_resampled, y_test = src.random_forest.train_rf(X, target, test_size = 0.2, random_state = 42, optimize = True)
 
 # Evaluating accuracy of the model
-rf_train_accuracy, rf_test_accuracy = src.random_forest.evaluate_rf(rf, X_train_pca, X_test_pca, y_train_resampled, y_test, output_dir = output_dir, hour_timestamp = hour_timestamp())
+rf_train_accuracy, rf_test_accuracy = src.random_forest.evaluate_rf(rf, X_train_pca, X_test_pca, y_train_resampled, y_test, output_dir = output_dir, hour_timestamp = hour_timestamp(), optimize = True)
 
 print("\n Random Forest prediction DONE")
 

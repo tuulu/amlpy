@@ -145,7 +145,7 @@ def verify_imputation(df, df_imputed):
     
 #------------------------------------------------------------------------------------------------
 
-def histo_data(df1, df2, output_dir, hour_timestamp):
+def histo_data(df1, df2, output_dir, hour_timestamp, normalize = False):
     """Creates basic histogram plots both datasets."""
     # Create a figure with two subplots
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(15, 5))
@@ -163,7 +163,10 @@ def histo_data(df1, df2, output_dir, hour_timestamp):
     ax2.set_ylabel('Count')
     
     plt.tight_layout()
-    plt.savefig(f"{output_dir}/figures/histo_plot_{hour_timestamp}.png", bbox_inches='tight', dpi=300)
+    if normalize is True:
+        plt.savefig(f"{output_dir}/figures/histo_plot_normalized_{hour_timestamp}.png", bbox_inches='tight', dpi=300)
+    else:
+        plt.savefig(f"{output_dir}/figures/histo_plot_{hour_timestamp}.png", bbox_inches='tight', dpi=300)
     plt.show()
     plt.close()
 
