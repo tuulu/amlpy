@@ -25,10 +25,6 @@ cd amlpy
 ```bash
 pip install -r requirements.txt
 ```
-## 📊 **Data**
-Ensure you have the necessary data files before proceeding with the usage steps. 
-The tool is designed to work with Affymetrix microarray data files, which should be formatted as specified in the .src/data_format_specifications.md document (consider adding this document for clarity).
-
 ## 🧪 **Usage**
 
 1) Please ensure you have the data downloaded first by running .src/data_import.py as a standalone script 
@@ -39,8 +35,5 @@ python src/data_import.py
 ```bash
 python main.py
 ```
-## 📚 **Libraries**
-
-Libraries used can be seen in requirements.txt document.
 
 
