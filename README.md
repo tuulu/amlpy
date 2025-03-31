@@ -35,5 +35,6 @@ python src/data_import.py
 ```bash
 python main.py
 ```
+3) Enjoy!
 
 
