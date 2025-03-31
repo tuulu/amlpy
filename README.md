@@ -1,6 +1,6 @@
 # **amlpy**
 
-amlpy is a small-scale tool designed to analyze Affymetrix microarray data for detecting acute myeloid leukemia (AML). Utilizing several AI/ML methods, amlpy can assess mRNA microarray samples to determine the likelihood of them being cancerous.
+**amlpy** is a small-scale tool designed to analyze Affymetrix microarray data for detecting acute myeloid leukemia (AML). Utilizing several AI/ML methods, amlpy can assess mRNA microarray samples to determine the likelihood of them being cancerous.
 
 ## 🚀 **Features**
 
@@ -36,8 +36,3 @@ python src/data_import.py
 python main.py
 ```
 3) Enjoy!
-<<<<<<< HEAD
-=======
-
-
->>>>>>> fafbd2e40bad2e75067af6ef350bbb6fe4fff293
