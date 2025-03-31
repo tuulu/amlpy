@@ -1,6 +1,6 @@
-# **ONCODETECTOR**
+# **Amply**
 
-Oncodetector is an artificial intelligence-based tool that estimates the probability of an Affymetrix rRNA microarray sample being cancerous.
+Amply is an artificial intelligence-based tool that estimates the probability of an Affymetrix rRNA microarray sample being cancerous.
 
 ## 🚀 **Features**
 
