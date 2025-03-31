@@ -36,3 +36,8 @@ python src/data_import.py
 python main.py
 ```
 3) Enjoy!
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> fafbd2e40bad2e75067af6ef350bbb6fe4fff293
